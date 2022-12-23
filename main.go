@@ -1,12 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/jhojanperlaza/email_search_engine/functions"
 	"io/ioutil"
-	"log"
 	"os"
-	"strings"
 )
 
 func main() {
@@ -46,11 +44,11 @@ func main() {
 	}
 
 	if len(list_files) >= 1 {
-		To_ndjson(list_files, current_Path)
+		functions.To_ndjson(list_files, current_Path)
 	}
 
 	for _, dir := range list_dirs {
-		Browser_dirs(dir, current_Path)
+		functions.Browser_dirs(dir, current_Path)
 	}
 
 	fmt.Println("Database indexing done successfully!!!")

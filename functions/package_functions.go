@@ -1,23 +1,33 @@
+/*This package contains all the necessary
+functions to index files in nd_json format
+and upload them to the ZincSearch database.*/
 package functions
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"strings"
 )
 
+//Function that prints on console errors in execution process
+func HandleErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*Function that recursively traverses directories
+and files to create the indexes of the database.*/
 func Browser_dirs(name_dir string, curt_path string) {
 
 	curt_path += "/" + name_dir
 
 	// Get the currents files
 	files, err := ioutil.ReadDir(curt_path)
-	if err != nil {
-		panic(err)
-	}
+	HandleErr(err)
+
 	if len(files) < 1 {
 		panic("No files found")
 	}
@@ -46,15 +56,9 @@ func Browser_dirs(name_dir string, curt_path string) {
 	if len(list_dirs) == 0 {
 		return
 	}
-
 }
 
-func HandleErr(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
+//function that writes the data to a file 'bd1_mails.ndjson'
 func write_file(dict1 []byte, dict2 []byte) {
 
 	if _, err := os.Stat("bd1_mails.ndjson"); err == nil {
@@ -83,9 +87,11 @@ func write_file(dict1 []byte, dict2 []byte) {
 
 		defer f.Close()
 	}
-
 }
 
+/*function that takes the name of the files
+present in the directory and creates the ndjson
+format for the data*/
 func To_ndjson(names_files []string, path string) {
 
 	split_index := strings.Split(path, "/")
@@ -99,9 +105,7 @@ func To_ndjson(names_files []string, path string) {
 	}
 
 	to_json, err := json.Marshal(dict1)
-	if err != nil {
-		panic(err)
-	}
+	HandleErr(err)
 
 	//build the second dictionary
 	dict2 := make(map[string]string)
@@ -109,9 +113,7 @@ func To_ndjson(names_files []string, path string) {
 	for _, name := range names_files {
 
 		content, err := ioutil.ReadFile(path + "/" + name)
-		if err != nil {
-			log.Fatal(err)
-		}
+		HandleErr(err)
 		//convert to string
 		str_content := string(content)
 
@@ -119,9 +121,7 @@ func To_ndjson(names_files []string, path string) {
 	}
 
 	to_json2, err := json.Marshal(dict2)
-	if err != nil {
-		panic(err)
-	}
+	HandleErr(err)
 
 	write_file(to_json, to_json2)
 }
