@@ -51,5 +51,6 @@ func main() {
 		functions.Browser_dirs(dir, current_Path)
 	}
 
+	functions.Post_zincsearch()
 	fmt.Println("Database indexing done successfully!!!")
 }

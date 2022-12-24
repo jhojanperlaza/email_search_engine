@@ -4,9 +4,11 @@ and upload them to the ZincSearch database.*/
 package functions
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"strings"
 )
@@ -58,12 +60,12 @@ func Browser_dirs(name_dir string, curt_path string) {
 	}
 }
 
-//function that writes the data to a file 'bd1_mails.ndjson'
+//function that writes the data to a file 'bd_mails.ndjson'
 func write_file(dict1 []byte, dict2 []byte) {
 
-	if _, err := os.Stat("bd1_mails.ndjson"); err == nil {
+	if _, err := os.Stat("bd_mails.ndjson"); err == nil {
 		//File exists
-		f, err := os.OpenFile("bd1_mails.ndjson", os.O_APPEND|os.O_WRONLY, 0660)
+		f, err := os.OpenFile("bd_mails.ndjson", os.O_APPEND|os.O_WRONLY, 0660)
 		HandleErr(err)
 		str := string(dict1)
 		_, err = fmt.Fprint(f, str, "\n")
@@ -76,7 +78,7 @@ func write_file(dict1 []byte, dict2 []byte) {
 
 	} else {
 		//File does not exist
-		f, err := os.Create("bd1_mails.ndjson")
+		f, err := os.Create("bd_mails.ndjson")
 		HandleErr(err)
 		str := string(dict1)
 		_, err = fmt.Fprint(f, str, "\n")
@@ -124,4 +126,19 @@ func To_ndjson(names_files []string, path string) {
 	HandleErr(err)
 
 	write_file(to_json, to_json2)
+}
+
+func Post_zincsearch() {
+	file_found, err := ioutil.ReadFile("bd_mails.ndjson")
+	HandleErr(err)
+
+	h := http.Client{}
+	req, err := http.NewRequest("POST", "http://localhost:4080/api/_bulk", bytes.NewBuffer(file_found))
+	HandleErr(err)
+
+	req.SetBasicAuth("admin", "Complexpass#123")
+	r, err := h.Do(req)
+	HandleErr(err)
+
+	defer r.Body.Close()
 }
