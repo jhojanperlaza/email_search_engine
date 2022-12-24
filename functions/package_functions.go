@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -141,4 +142,5 @@ func Post_zincsearch() {
 	HandleErr(err)
 
 	defer r.Body.Close()
+	io.Copy(os.Stdout, r.Body)
 }
