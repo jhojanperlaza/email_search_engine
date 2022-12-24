@@ -7,8 +7,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -130,6 +130,7 @@ func To_ndjson(names_files []string, path string) {
 }
 
 func Post_zincsearch() {
+	fmt.Println("pilas")
 	file_found, err := ioutil.ReadFile("bd_mails.ndjson")
 	HandleErr(err)
 
@@ -142,5 +143,10 @@ func Post_zincsearch() {
 	HandleErr(err)
 
 	defer r.Body.Close()
-	io.Copy(os.Stdout, r.Body)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(body))
 }
