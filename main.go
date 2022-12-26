@@ -52,5 +52,5 @@ func main() {
 	}
 
 	functions.Post_zincsearch()
-	fmt.Println("Database indexing done successfully!!!")
+	fmt.Println("Database indexing successfully!!!")
 }

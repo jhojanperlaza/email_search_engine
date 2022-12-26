@@ -98,12 +98,38 @@ format for the data*/
 func To_ndjson(names_files []string, path string) {
 
 	split_index := strings.Split(path, "/")
-	name_index := split_index[len(split_index)-1]
+	var name_index string
+
+	if len(split_index) >= 2 {
+		name_index1 := split_index[len(split_index)-2]
+		// index name cannot start with "_"
+		name_index1 = strings.TrimPrefix(name_index1, "_")
+		name_index = name_index1 + "." + split_index[len(split_index)-1]
+	} else {
+		name_index = split_index[len(split_index)-1]
+		// index name cannot start with "_"
+		name_index = strings.TrimPrefix(name_index, "_")
+	}
+
+	var cont int64 = 0
+	for _, name_file := range names_files {
+
+		MyFile, err := os.Stat(path + "/" + name_file)
+		if err != nil {
+			fmt.Println("File does not exist")
+		}
+		cont += MyFile.Size()
+	}
+
+	if cont > 700000 {
+		chunkSlice(names_files, len(names_files)/2, path)
+		return
+	}
 
 	//build of the first dictionary for the documents bulk format
 	dict1 := map[string]map[string]string{
 		"index": {
-			"_index": name_index,
+			"_index": "enron_mail_20110402",
 		},
 	}
 
@@ -120,7 +146,7 @@ func To_ndjson(names_files []string, path string) {
 		//convert to string
 		str_content := string(content)
 
-		dict2[name] = str_content
+		dict2[name_index+"."+name] = str_content
 	}
 
 	to_json2, err := json.Marshal(dict2)
@@ -129,8 +155,26 @@ func To_ndjson(names_files []string, path string) {
 	write_file(to_json, to_json2)
 }
 
+func chunkSlice(slice []string, chunkSize int, path string) {
+	var chunks [][]string
+	for i := 0; i < len(slice); i += chunkSize {
+		end := i + chunkSize
+
+		// necessary check to avoid slicing beyond
+		// slice capacity
+		if end > len(slice) {
+			end = len(slice)
+		}
+
+		chunks = append(chunks, slice[i:end])
+	}
+
+	for _, chunk := range chunks {
+		To_ndjson(chunk, path)
+	}
+}
+
 func Post_zincsearch() {
-	fmt.Println("pilas")
 	file_found, err := ioutil.ReadFile("bd_mails.ndjson")
 	HandleErr(err)
 
