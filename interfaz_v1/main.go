@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-chi/chi"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -19,6 +21,12 @@ func main() {
 	router.Get("/api/thumbnail", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{ "message": "bar" }`))
+	})
+
+	router.Post("/api/searchQuery", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`OK`))
+		body, _ := ioutil.ReadAll(r.Body)
+		fmt.Println(string(body))
 	})
 
 	FileServer(router)

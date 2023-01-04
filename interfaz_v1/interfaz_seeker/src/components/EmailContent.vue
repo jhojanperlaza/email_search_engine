@@ -1,12 +1,22 @@
+<script>
+export default {
+  name: "EmailConten",
+  props: {
+    dataTemplate: String,
+  },
+};
+</script>
+
+
 <template>
   <div class="pt-10 pr-10 pb-28">
     <div class=" text-white h-screen">
       <div class="h-3/4 overflow-auto bg-black rounded-md shadow-lg shadow-lime-600">
         <div class="flex justify-center">
           <div class="pt-4">
-            <form v-on:submit.prevent="makeWebsiteThumbnail">
-              <p> {{ thumbnailUrl }}</p>
-            </form>
+            <p>
+              {{ dataTemplate }}
+            </p>
             Message-ID: 10083817.1075842507824.JavaMail.evans@thyme<br>
             Date: Wed, 13 Dec 2000 09:33:00 -0800 (PST)<br>
             From: drew.fossum@enron.com<br>
@@ -56,30 +66,3 @@
   </div>
 </template>
 
-<script >
-import axios from 'axios';
-
-export default {
-  name: 'App',
-
-  data() {
-    return {
-      websiteUrl: '',
-      thumbnailUrl: '',
-    }
-  },
-
-  methods: {
-    makeWebsiteThumbnail() {
-      axios.get("http://localhost:3000/api/thumbnail")
-        .then((response) => {
-          this.thumbnailUrl = response.data;
-          console.log(this.thumbnailUrl)
-        })
-        .catch((error) => {
-          window.alert(`The API returned an error: ${error}`);
-        })
-    }
-  }
-}
-</script>

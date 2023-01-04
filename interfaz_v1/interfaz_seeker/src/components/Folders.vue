@@ -1,9 +1,18 @@
+<script>
+export default {
+  name: "Folders",
+  props: {
+    dataTemplate: String,
+  },
+};
+</script>
+
 <template>
   <div class="px-10 py-10 w-auto bg-black rounded-md shadow-lg shadow-lime-600">
     <table class="table-auto text-white">
       <thead>
         <tr>
-          <th>folder 1</th>
+          <th>{{ dataTemplate }}</th>
           <th>folder 2</th>
           <th>File</th>
         </tr>
@@ -149,3 +158,4 @@
     </table>
   </div>
 </template>
+
