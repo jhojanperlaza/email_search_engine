@@ -1,5 +1,5 @@
 # ...[Email search engine]...
-
+![ image ](./view_proyect.png)
 Este es el back-end del sistema de **Indexación de contenidos en la herramienta [ZincSearch](https://zincsearch.com/)**.
 
 ## Archivos relacionados:
