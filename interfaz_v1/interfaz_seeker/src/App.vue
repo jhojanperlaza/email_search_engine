@@ -68,10 +68,10 @@ import EmailConten from './components/EmailContent.vue';
   <main>
     <div class="flex justify-between">
       <div class="pt-10 pl-10 pr-2">
-        <Folders :dataTemplate="responseToComponents" />
+        <Folders :dataTemplate="responseToComponents" @FoldersComponentSaid="methodMessageEmail($event)" />
       </div>
       <div class="w-8/12">
-        <EmailConten :dataTemplate="responseToComponents" />
+        <EmailConten :dataTemplate="responseToComponents" :messageEmailContent="messageEmailContent"/>
       </div>
     </div>
   </main>
@@ -86,7 +86,8 @@ export default {
   data() {
     return {
       query_search: '',
-      responseToComponents: { 'Folder1.Folder2.File' : 'waiting for user input....' }
+      messageEmailContent: '',
+      responseToComponents: { 'Folder1.Folder2.File': 'waiting for user input....' }
     }
   },
 
@@ -94,12 +95,15 @@ export default {
     sendToBackend() {
       axios.post("http://localhost:3000/api/searchQuery", this.query_search)
         .then((response) => {
-          console.log(response.data)
           this.responseToComponents = response.data
+          this.messageEmailContent = ''
         })
         .catch((error) => {
           window.alert(`The API returned an error: ${error}`);
         })
+    },
+    methodMessageEmail(message) {
+      this.messageEmailContent = message;
     },
   },
   components: {

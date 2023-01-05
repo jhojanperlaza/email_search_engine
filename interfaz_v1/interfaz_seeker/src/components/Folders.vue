@@ -8,6 +8,9 @@ export default {
     showFolders() {
       let values = Object.keys(this.dataTemplate)
       return values
+    },
+    messageToEmailContent(f) {
+      this.$emit('FoldersComponentSaid', f)
     }
   },
 };
@@ -15,7 +18,7 @@ export default {
 
 <template>
   <div class="px-10 py-10 w-auto h-screen">
-    <div class="bg-black rounded-md shadow-lg shadow-lime-600 h-3/4 overflow-y-auto">
+    <div class="bg-black rounded-md shadow-lg shadow-lime-600 h-3/4 overflow-y-auto px-4">
       <table class="table-auto text-white">
         <thead>
           <tr>
@@ -51,12 +54,14 @@ export default {
               </div>
             </td>
             <td>
-              <div class="flex flex-col items-center">
-                <div class="w-10 h-10">
-                  <img src="./images/documento.png" alt="folder1">
+              <button @click="messageToEmailContent(folder)">
+                <div class="flex flex-col items-center">
+                  <div class="w-10 h-10">
+                    <img src="./images/documento.png" alt="folder1">
+                  </div>
+                  <div class="text-sm">{{ folder.split(".")[2] }}</div>
                 </div>
-                <div class="text-sm">{{ folder.split(".")[2] }}</div>
-              </div>
+              </button>
             </td>
           </tr>
         </tbody>
