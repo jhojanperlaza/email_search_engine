@@ -68,10 +68,10 @@ import EmailConten from './components/EmailContent.vue';
   <main>
     <div class="flex justify-between">
       <div class="pt-10 pl-10 pr-2">
-        <Folders :dataTemplate="responseToComponents"/>
+        <Folders :dataTemplate="responseToComponents" />
       </div>
       <div class="w-8/12">
-        <EmailConten :dataTemplate="responseToComponents"/>
+        <EmailConten :dataTemplate="responseToComponents" />
       </div>
     </div>
   </main>
@@ -86,7 +86,7 @@ export default {
   data() {
     return {
       query_search: '',
-      responseToComponents: 'aun nada',
+      responseToComponents: { 'Folder1.Folder2.File' : 'waiting for user input....' }
     }
   },
 

@@ -69,6 +69,8 @@ func DataProcessing(data map[string]interface{}, keyCharacters string) map[strin
 					emailsData, _ = value.(string)
 					//magic
 					if strings.Contains(emailsData, keyCharacters) {
+						emailsData = strings.Replace(emailsData, "\n", "<br>", -1)
+						emailsData = strings.Replace(emailsData, keyCharacters, "<mark>"+keyCharacters+"</mark>", -1)
 						DataReturn[key] = emailsData
 					}
 				}
