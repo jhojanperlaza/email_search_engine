@@ -146,7 +146,7 @@ func To_ndjson(names_files []string, path string) {
 		//convert to string
 		str_content := string(content)
 
-		dict2[name_index+"."+name] = str_content
+		dict2[name_index+"."+name] = name_index + "." + name + "\n" + str_content
 	}
 
 	to_json2, err := json.Marshal(dict2)
