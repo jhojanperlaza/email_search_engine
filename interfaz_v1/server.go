@@ -98,7 +98,7 @@ func main() {
 	})
 
 	FileServer(router)
-
+	fmt.Println("Seeker is running in http://localhost:3000")
 	panic(server.ListenAndServe())
 }
 
