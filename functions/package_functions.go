@@ -64,9 +64,9 @@ func Browser_dirs(name_dir string, curt_path string) {
 //function that writes the data to a file 'bd_mails.ndjson'
 func write_file(dict1 []byte, dict2 []byte) {
 
-	if _, err := os.Stat("bd_mails.ndjson"); err == nil {
+	if _, err := os.Stat(os.Getenv("name_bd") + ".ndjson"); err == nil {
 		//File exists
-		f, err := os.OpenFile("bd_mails.ndjson", os.O_APPEND|os.O_WRONLY, 0660)
+		f, err := os.OpenFile(os.Getenv("name_bd")+".ndjson", os.O_APPEND|os.O_WRONLY, 0660)
 		HandleErr(err)
 		str := string(dict1)
 		_, err = fmt.Fprint(f, str, "\n")
@@ -79,7 +79,7 @@ func write_file(dict1 []byte, dict2 []byte) {
 
 	} else {
 		//File does not exist
-		f, err := os.Create("bd_mails.ndjson")
+		f, err := os.Create(os.Getenv("name_bd") + ".ndjson")
 		HandleErr(err)
 		str := string(dict1)
 		_, err = fmt.Fprint(f, str, "\n")
@@ -129,7 +129,7 @@ func To_ndjson(names_files []string, path string) {
 	//build of the first dictionary for the documents bulk format
 	dict1 := map[string]map[string]string{
 		"index": {
-			"_index": "enron_mail_20110402",
+			"_index": os.Getenv("name_bd"),
 		},
 	}
 
@@ -146,7 +146,7 @@ func To_ndjson(names_files []string, path string) {
 		//convert to string
 		str_content := string(content)
 
-		dict2[name_index+"."+name] = name_index + "." + name + "\n" + str_content
+		dict2[name_index+"."+name] = str_content
 	}
 
 	to_json2, err := json.Marshal(dict2)
@@ -175,7 +175,7 @@ func chunkSlice(slice []string, chunkSize int, path string) {
 }
 
 func Post_zincsearch() {
-	file_found, err := ioutil.ReadFile("bd_mails.ndjson")
+	file_found, err := ioutil.ReadFile(os.Getenv("name_bd") + ".ndjson")
 	HandleErr(err)
 
 	h := http.Client{}

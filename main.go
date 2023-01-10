@@ -21,6 +21,9 @@ func main() {
 
 	current_Path += "/" + name_bd[1]
 
+	//Declare environment name of bd
+	os.Setenv("name_bd", name_bd[1])
+
 	// Get the currents files
 	files, err := ioutil.ReadDir(current_Path)
 	if err != nil {
