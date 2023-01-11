@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/jhojanperlaza/email_search_engine/indexer_v1/functions"
+	"github.com/jhojanperlaza/email_search_engine/tree/main/indexer_v1/functions"
 	"io/ioutil"
 	"os"
 )
