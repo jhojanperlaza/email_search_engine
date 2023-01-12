@@ -35,11 +35,6 @@ func FunRequest(keyCharacters string) map[string]string {
 	}
 	x := make(map[string]interface{})
 
-	e := ioutil.WriteFile("p.json", body, 0644)
-	if err != nil {
-		log.Fatal(e)
-	}
-
 	json.Unmarshal(body, &x)
 	DataToFront := DataProcessing(x, keyCharacters)
 	return DataToFront
