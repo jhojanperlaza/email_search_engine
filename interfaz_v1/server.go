@@ -54,7 +54,6 @@ func DataProcessing(data map[string]interface{}, keyCharacters string) map[strin
 			break
 		}
 	}
-	fmt.Println(LenData)
 	if LenData <= 0 {
 		return map[string]string{"error.error.error": "****************no match found****************"}
 	}
