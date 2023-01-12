@@ -16,7 +16,7 @@ func FunRequest(keyCharacters string) map[string]string {
 	//Assigned to: CN=Sandra F Brawner
 	//Sandra_Brawner_Dec2000
 	query := fmt.Sprintf(`{"query": {"match": {"_all": "%s" }}, "size":10}`, keyCharacters)
-	req, err := http.NewRequest("POST", "http://localhost:4080/es/enron_mail_20110402/_search", strings.NewReader(query))
+	req, err := http.NewRequest("POST", "http://localhost:4080/es/bd_v3/_search", strings.NewReader(query))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,6 +35,11 @@ func FunRequest(keyCharacters string) map[string]string {
 	}
 	x := make(map[string]interface{})
 
+	e := ioutil.WriteFile("p.json", body, 0644)
+	if err != nil {
+		log.Fatal(e)
+	}
+
 	json.Unmarshal(body, &x)
 	DataToFront := DataProcessing(x, keyCharacters)
 	return DataToFront
@@ -42,27 +47,24 @@ func FunRequest(keyCharacters string) map[string]string {
 
 func DataProcessing(data map[string]interface{}, keyCharacters string) map[string]string {
 
-	var DictAux = data["_shards"]
-	var LenData1 float64
 	var emailsData string
 	DataReturn := make(map[string]string)
-
-	for key, value := range DictAux.(map[string]interface{}) {
-		if key == "total" {
-			LenData1, _ = value.(float64)
-			break
-		}
-	}
-	DictAux = data["hits"]
-	LenData := int(LenData1)
+	DictAux := data["hits"]
+	LenData := 0
 
 	for key, value := range DictAux.(map[string]interface{}) {
 		if key == "hits" {
 			DictAux = value
+			LenData = len(value.([]interface{}))
 			break
 		}
 	}
-	for i := 0; i <= LenData+1; i++ {
+	fmt.Println(LenData)
+	if LenData <= 0 {
+		return map[string]string{"error.error.error": "****************no match found****************"}
+	}
+
+	for i := 0; i <= LenData-1; i++ {
 		for key, value := range DictAux.([]interface{})[i].(map[string]interface{}) {
 			if key == "_source" {
 				for key, value := range value.(map[string]interface{}) {
